@@ -1,0 +1,15 @@
+{
+  "name": "tread",
+  "version": "1.0.0",
+  "description": "Test runner that attempts to stay out of the way.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "test",
+    "runner"
+  ],
+  "author": "Wraithan",
+  "license": "ISC"
+}
