@@ -11,5 +11,9 @@
     "runner"
   ],
   "author": "Wraithan",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "glob": "^5.0.5",
+    "yargs": "^3.8.0"
+  }
 }
