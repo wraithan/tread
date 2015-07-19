@@ -5,11 +5,12 @@ var find = require('../../../lib/find')
 var path = require('path')
 
 var returned = 0
-find(['./test/unit/find/not-empty'], '*.tap.js', [], function done (err, data) {
+find(['./test/unit/find/nested-file'], '*.tap.js', [], function done (err, data) {
   returned++
   assert.equal(err, undefined, 'no err')
   var paths = [
-    path.join(process.cwd(), './test/unit/find/not-empty/some.tap.js')
+    path.join(process.cwd(), 'test/unit/find/nested-file/a.tap.js'),
+    path.join(process.cwd(), 'test/unit/find/nested-file/node_modules/b.tap.js')
   ]
   assert.sameDeepMembers(data, paths, 'found the stuff')
 })
