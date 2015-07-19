@@ -21,5 +21,19 @@
   "dependencies": {
     "glob": "^5.0.5",
     "yargs": "^3.8.0"
-  }
+  },
+  "devDependencies": {
+    "eslint": "^0.24.1"
+  },
+  "directories": {
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/wraithan/tread.git"
+  },
+  "bugs": {
+    "url": "https://github.com/wraithan/tread/issues"
+  },
+  "homepage": "https://github.com/wraithan/tread#readme"
 }
