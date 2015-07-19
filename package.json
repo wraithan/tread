@@ -3,8 +3,14 @@
   "version": "1.0.0",
   "description": "Test runner that attempts to stay out of the way.",
   "main": "index.js",
+  "bin": {
+    "tread": "index.js"
+  },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "npm run test-lint && npm run test-unit && npm run test-integration",
+    "test-lint": "eslint .",
+    "test-unit": "node test/unit/index.js",
+    "test-integration": "node test/integration/index.js"
   },
   "keywords": [
     "test",

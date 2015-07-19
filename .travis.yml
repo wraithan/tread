@@ -1,0 +1,15 @@
+language: node_js
+node_js:
+  - "0.12"
+  - "0.10"
+  - "0.8"
+  - "iojs-v1"
+  - "iojs-v2"
+env:
+  - SUITE=unit
+  - SUITE=integration
+  - SUITE=lint
+before_install:
+  - if npm -v | grep -q "^1"; then npm install -g npm@1.4.28; fi
+  - if node -v | grep -q "^v0"; then npm install -g npm@latest; fi
+script: npm run test-$SUITE

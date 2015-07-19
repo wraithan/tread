@@ -1,9 +1,9 @@
-var yargs = require('yargs')
+#!/usr/bin/env node
+
+var argv = require('yargs').argv
 
 var findFiles = require('./lib/find')
 var runner = require('./lib/run')
-
-var argv = yargs.argv
 
 var cwd = argv._.length ? argv._ : [process.cwd()]
 var pattern = argv.pattern || argv.p || '*.tap.js'
