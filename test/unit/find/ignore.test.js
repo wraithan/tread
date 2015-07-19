@@ -7,7 +7,7 @@ var path = require('path')
 var FOLDERS = ['./test/unit/find/nested-file']
 
 var returned = 0
-find(FOLDERS, '*.tap.js', ['**/node_modules/**'], function done (err, data) {
+find(FOLDERS, '*.tap.js', ['**/folder/**'], function done (err, data) {
   returned++
   assert.equal(err, undefined, 'no err')
   var paths = [
