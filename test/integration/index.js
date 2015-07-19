@@ -2,7 +2,7 @@
 
 var childProcess = require('child_process')
 
-childProcess.exec('tread', function onBoot (err, stdout, stderr) {
+childProcess.exec('./index.js', function onBoot (err, stdout, stderr) {
   if (err) {
     throw err
   }
