@@ -12,6 +12,8 @@ find(['./test/unit/find/nested-file'], '*.tap.js', [], function done (err, data)
     path.join(process.cwd(), 'test/unit/find/nested-file/a.tap.js'),
     path.join(process.cwd(), 'test/unit/find/nested-file/node_modules/b.tap.js')
   ]
+  console.log('data: %s', data)
+  console.log('paths: %s', paths)
   assert.sameDeepMembers(data, paths, 'found the stuff')
 })
 
