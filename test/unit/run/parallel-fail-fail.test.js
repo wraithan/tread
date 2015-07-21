@@ -4,8 +4,8 @@ var http = require('http')
 var assert = require('chai').assert
 var run = require('../../../lib/run')
 
-var filenameA = './test/unit/run/scripts/pass-100-a.js'
-var filenameB = './test/unit/run/scripts/pass-100-b.js'
+var filenameA = './test/unit/run/scripts/fail-100-a.js'
+var filenameB = './test/unit/run/scripts/fail-100-b.js'
 var expectedUrls = [
   '/start/a',
   '/end/a',
@@ -17,17 +17,18 @@ module.exports = function serialPassPassTest (done) {
   var count = 0
   var found = []
   var hit = 0
+  var hitUrls = []
 
   startServer(expectedUrls, function serverStarted (port) {
     process.env.TREAD_PORT = port
-    run(1, validator)(null, [filenameA, filenameB])
+    run(2, validator)(null, [filenameA, filenameB])
   })
 
   function validator (file, code, signal, duration) {
     count++
     assert.ok(file, 'got filename')
     found.push(file)
-    assert.equal(code, 0, 'should exit 0')
+    assert.equal(code, 1, 'should exit 1')
     assert.notOk(signal, 'should not have an exit signal')
     assert.isAbove(duration, 1, 'has a duration')
   }
@@ -36,7 +37,13 @@ module.exports = function serialPassPassTest (done) {
     var server = http.createServer(function requestHandler (req, res) {
       req.resume()
       res.end()
-      assert.equal(req.url, urls[hit], 'hits should come in the proper order')
+      var parts = req.url.split('/')
+      if (hit < 2) {
+        assert.equal(parts[1], 'start', 'first 2 hits are starts')
+      } else {
+        assert.equal(parts[1], 'end', 'last 2 hits are ends')
+      }
+      hitUrls.push(req.url)
       hit++
       setTimeout(function closer () {
         server.close()
@@ -55,10 +62,10 @@ module.exports = function serialPassPassTest (done) {
       [filenameA, filenameB],
       'should have found the files'
     )
-    assert.equal(
-      hit,
-      expectedUrls.length,
-      'should be hit once for start, once for end for each script'
+    assert.sameDeepMembers(
+      hitUrls.sort(),
+      expectedUrls.sort(),
+      'make sure all the expected endpoints were hit'
     )
     done()
   })

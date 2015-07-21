@@ -17,10 +17,11 @@ module.exports = function serialPassPassTest (done) {
   var count = 0
   var found = []
   var hit = 0
+  var hitUrls = []
 
   startServer(expectedUrls, function serverStarted (port) {
     process.env.TREAD_PORT = port
-    run(1, validator)(null, [filenameA, filenameB])
+    run(2, validator)(null, [filenameA, filenameB])
   })
 
   function validator (file, code, signal, duration) {
@@ -36,7 +37,13 @@ module.exports = function serialPassPassTest (done) {
     var server = http.createServer(function requestHandler (req, res) {
       req.resume()
       res.end()
-      assert.equal(req.url, urls[hit], 'hits should come in the proper order')
+      var parts = req.url.split('/')
+      if (hit < 2) {
+        assert.equal(parts[1], 'start', 'first 2 hits are starts')
+      } else {
+        assert.equal(parts[1], 'end', 'last 2 hits are ends')
+      }
+      hitUrls.push(req.url)
       hit++
       setTimeout(function closer () {
         server.close()
@@ -55,10 +62,10 @@ module.exports = function serialPassPassTest (done) {
       [filenameA, filenameB],
       'should have found the files'
     )
-    assert.equal(
-      hit,
-      expectedUrls.length,
-      'should be hit once for start, once for end for each script'
+    assert.sameDeepMembers(
+      hitUrls.sort(),
+      expectedUrls.sort(),
+      'make sure all the expected endpoints were hit'
     )
     done()
   })

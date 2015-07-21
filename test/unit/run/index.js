@@ -6,7 +6,9 @@ var tests = [
   './one-pass.test',
   './one-fail.test',
   './serial-pass-pass.test',
-  './serial-fail-fail.test'
+  './serial-fail-fail.test',
+  './parallel-pass-pass.test',
+  './parallel-fail-fail.test'
 ]
 
 module.exports = function run (done) {

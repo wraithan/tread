@@ -17,7 +17,8 @@ module.exports = function onePassTest (done) {
     assert.notOk(signal)
     assert.isAbove(duration, 1, 'has a duration')
   }
-  process.on('beforeExit', function onExit () {
+
+  process.once('beforeExit', function onExit () {
     assert.equal(count, 1, 'should run one script')
     done()
   })
