@@ -2,4 +2,4 @@
 
 require('./argv.test')
 require('./find')
-require('./run')
+require('./run')(function noop () {})
