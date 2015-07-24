@@ -9,6 +9,7 @@ env:
   - SUITE=unit
   - SUITE=integration
   - SUITE=lint
+  - SUITE=smoke
 before_install:
   - if npm -v | grep -q "^1"; then npm install -g npm@1.4.28; fi
   - if node -v | grep -q "^v0"; then npm install -g npm@latest; fi

@@ -7,10 +7,11 @@
     "tread": "index.js"
   },
   "scripts": {
-    "test": "npm run test-lint && npm run test-unit && npm run test-integration",
+    "test": "npm run test-lint && npm run test-unit && npm run test-integration && npm run test-smoke",
     "test-lint": "eslint .",
     "test-unit": "node test/unit/index.js",
-    "test-integration": "node test/integration/index.js"
+    "test-integration": "node test/integration/index.js",
+    "test-smoke": "node ./index.js ./test -p *.test.js -j 4"
   },
   "keywords": [
     "test",
