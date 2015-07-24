@@ -12,20 +12,21 @@ findFiles(cwd, argv.pattern, argv.ignore, runner(argv.jobs, reporter))
 
 var failures = 0
 
-function reporter (file, code, signal, duration) {
-  process.stdout.write(file)
+function reporter (error, result) {
+  if (error) throw error
+  process.stdout.write(result.filename)
   process.stdout.write(': ')
-  if (code) {
+  if (result.exitCode) {
     process.stdout.write('F')
     failures++
-  } else if (signal) {
+  } else if (result.exitSignal) {
     process.stdout.write('X')
     failures++
   } else {
     process.stdout.write('.')
   }
   process.stdout.write(' ')
-  process.stdout.write(duration.toString())
+  process.stdout.write(result.duration.toString())
   process.stdout.write('ms\n')
 }
 
