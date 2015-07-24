@@ -1,3 +1,3 @@
 'use strict'
 
-require('./sample')('b', 100, 1)
+require('./sample')(100, 1)

@@ -1,72 +1,51 @@
 'use strict'
 
-var http = require('http')
 var assert = require('chai').assert
 var run = require('../../../lib/run')
 
 var filenameA = './test/unit/run/scripts/pass-100-a.js'
 var filenameB = './test/unit/run/scripts/pass-100-b.js'
-var expectedUrls = [
-  '/start/a',
-  '/end/a',
-  '/start/b',
-  '/end/b'
-]
 
 module.exports = function serialPassPassTest (done) {
   var count = 0
-  var found = []
-  var hit = 0
-  var hitUrls = []
+  var found = {}
+  var start = Date.now()
+  run(2, validator)(null, [filenameA, filenameB])
 
-  startServer(expectedUrls, function serverStarted (port) {
-    process.env.TREAD_PORT = port
-    run(2, validator)(null, [filenameA, filenameB])
-  })
-
-  function validator (file, code, signal, duration) {
+  function validator (error, result) {
+    assert.isNull(error, 'should have no error')
+    var end = Date.now()
     count++
-    assert.ok(file, 'got filename')
-    found.push(file)
-    assert.equal(code, 0, 'should exit 0')
-    assert.notOk(signal, 'should not have an exit signal')
-    assert.isAbove(duration, 1, 'has a duration')
-  }
-
-  function startServer (urls, ready) {
-    var server = http.createServer(function requestHandler (req, res) {
-      req.resume()
-      res.end()
-      var parts = req.url.split('/')
-      if (hit < 2) {
-        assert.equal(parts[1], 'start', 'first 2 hits are starts')
-      } else {
-        assert.equal(parts[1], 'end', 'last 2 hits are ends')
-      }
-      hitUrls.push(req.url)
-      hit++
-      setTimeout(function closer () {
-        server.close()
-      }, 1000)
-    })
-
-    server.listen(0, function serverReady () {
-      ready(server.address().port)
-    })
+    assert.ok(result.filename, 'found a file')
+    found[result.filename] = result
+    assert.equal(result.exitCode, 0, 'exit code 0')
+    assert.isNull(result.exitSignal, 'should not have exit signal')
+    assert.isAbove(result.duration, 100, 'has a duration')
+    assert.operator(
+      result.start, '>=', start,
+      'should have start at or equal to when the test started'
+    )
+    assert.operator(
+      result.end, '<=', end,
+      'should have ended before or equal to now'
+    )
   }
 
   process.once('beforeExit', function onExit () {
     assert.equal(count, 2, 'should run two scripts')
     assert.sameDeepMembers(
-      found.sort(),
+      Object.keys(found).sort(),
       [filenameA, filenameB],
       'should have found the files'
     )
-    assert.sameDeepMembers(
-      hitUrls.sort(),
-      expectedUrls.sort(),
-      'make sure all the expected endpoints were hit'
+    assert.operator(
+      found[filenameB].start, '<', found[filenameA].end,
+      'file B should have started before file A ended'
     )
     done()
   })
+}
+
+if (require.main === module) {
+  module.exports(function noop () {})
 }
