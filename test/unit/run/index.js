@@ -1,6 +1,7 @@
 'use strict'
 
 var async = require('async')
+var path = require('path')
 
 var tests = [
   './one-pass.test',
@@ -21,6 +22,11 @@ module.exports = function run (done) {
 }
 
 function runFile (filename, done) {
-  console.log('running %s', filename)
+  var filepath = path.join(__dirname, filename)
+  console.log('running %s', filepath) // eslint-disable-line no-console
   require(filename)(done)
+}
+
+if (require.main === module) {
+  module.exports(function noop () {})
 }
