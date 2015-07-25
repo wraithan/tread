@@ -11,7 +11,7 @@ var Timer = require('./lib/timer')
 var timer = new Timer(true)
 var cwd = argv._.length ? argv._ : [process.cwd()]
 
-findFiles(cwd, argv.pattern, argv.ignore, runner(argv, reporter))
+findFiles(cwd, argv.pattern, argv.ignore, runner(argv, reporter, last))
 
 var failures = 0
 var results = []
@@ -36,7 +36,8 @@ function reporter (error, result) {
   })
 }
 
-process.on('exit', function onExit () {
+/* eslint-disable no-console */
+function last () {
   timer.end()
   console.log(columnify(results, {
     columns: ['filename', 'status', 'duration']
@@ -52,4 +53,5 @@ process.on('exit', function onExit () {
     columns: ['stat', 'value']
   }))
   process.exit(failures) // eslint-disable-line no-process-exit
-})
+}
+/* eslint-enable no-console */
