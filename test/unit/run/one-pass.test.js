@@ -2,13 +2,16 @@
 
 var assert = require('chai').assert
 var run = require('../../../lib/run')
+var cli = require('../../../lib/cli')
 
 var filename = './test/unit/run/scripts/pass.js'
+var options = cli.parse('')
 
 module.exports = function onePassTest (done) {
   var count = 0
   var start = Date.now()
-  run(1, validator)(null, [filename])
+
+  run(options, validator, last)(null, [filename])
 
   function validator (error, result) {
     assert.isNull(error, 'should have no error')
@@ -28,10 +31,10 @@ module.exports = function onePassTest (done) {
     )
   }
 
-  process.once('beforeExit', function onExit () {
+  function last () {
     assert.equal(count, 1, 'should run one script')
     done()
-  })
+  }
 }
 
 if (require.main === module) {

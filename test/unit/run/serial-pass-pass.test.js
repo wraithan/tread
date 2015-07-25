@@ -2,15 +2,19 @@
 
 var assert = require('chai').assert
 var run = require('../../../lib/run')
+var cli = require('../../../lib/cli')
 
 var filenameA = './test/unit/run/scripts/pass-100-a.js'
 var filenameB = './test/unit/run/scripts/pass-100-b.js'
+var options = cli.parse('')
 
 module.exports = function serialPassPassTest (done) {
   var count = 0
   var found = {}
   var start = Date.now()
-  run(1, validator)(null, [filenameA, filenameB])
+  options.jobs = 1
+
+  run(options, validator, last)(null, [filenameA, filenameB])
 
   function validator (error, result) {
     assert.isNull(error, 'should have no error')
@@ -31,7 +35,7 @@ module.exports = function serialPassPassTest (done) {
     )
   }
 
-  process.once('beforeExit', function onExit () {
+  function last () {
     assert.equal(count, 2, 'should run two scripts')
     assert.sameDeepMembers(
       Object.keys(found).sort(),
@@ -43,7 +47,7 @@ module.exports = function serialPassPassTest (done) {
       'file A should have completed before file B started'
     )
     done()
-  })
+  }
 }
 
 if (require.main === module) {

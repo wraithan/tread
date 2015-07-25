@@ -3,7 +3,7 @@
 var assert = require('chai').assert
 
 module.exports = function argvTest (done) {
-  var argv = require('../../lib/cli')
+  var argv = require('../../lib/cli').argv
   assert.equal(argv.h, argv.help, 'help alias configured')
   assert.equal(argv.j, argv.jobs, 'jobs alias configured')
   assert.equal(argv.p, argv.pattern, 'pattern alias configured')
@@ -14,7 +14,7 @@ module.exports = function argvTest (done) {
   assert.equal(argv.jobs, 1, 'jobs default')
   assert.equal(argv.pattern, '*.tap.js', 'pattern default')
   assert.equal(argv.ignore, '**/node_modules/**', 'ignore default')
-  assert.equal(argv.timeout, 500, 'timeout default')
+  assert.equal(argv.timeout, 10, 'timeout default')
   done()
 }
 

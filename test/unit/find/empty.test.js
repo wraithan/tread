@@ -9,10 +9,6 @@ module.exports = function empty (done) {
     returned++
     assert.equal(err.message, 'No files found', 'returns an err')
     assert.equal(data, undefined, 'no data')
-  })
-
-  process.once('beforeExit', function onExit () {
-    assert.equal(returned, 1, 'callback called once and only once')
     done()
   })
 }
